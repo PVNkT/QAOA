@@ -20,7 +20,7 @@ class expectation:
         simulator = Aer.get_backend('aer_simulator')
         # expectation에 대한 sampling을 진행
         sampler = CircuitSampler(simulator).convert(expectation)
-        # 계산된 expectation 값에서 실수 값만을 반환
+        # 계산된 expectation 값에서 실수 값만을 반환 (Hamiltonian은 Hermition이기 때문에 허수부는 0이 된다.)
         return sampler.eval().real
 
 

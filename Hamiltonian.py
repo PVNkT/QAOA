@@ -5,9 +5,9 @@ class Hamiltonian:
     
     def __init__(self,graph):
         # graph에서 node와 edge의 정보를 저장
-        self.graph = graph
-        nodes = list(graph.nodes)
-        edges = list(graph.edges)
+        self.graph = graph.graph
+        nodes = list(self.graph.nodes)
+        edges = list(self.graph.edges)
         
         # qubit의 수(=node의 수)를 저장
         self.qubit = len(nodes)

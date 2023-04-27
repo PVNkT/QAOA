@@ -6,8 +6,8 @@ from make_graph import network_graph
 from Hamiltonian import Hamiltonian
 from variational_circuit import variational_circuit
 from calc_exp import expectation
-from optimization import opimization
-from result import get_answer
+from optimization import optimization
+from result import optimized_result
 
 
 def main(cfg=OmegaConf.load('config.yaml'))->None:
@@ -25,7 +25,7 @@ def main(cfg=OmegaConf.load('config.yaml'))->None:
     init_para = np.concatenate([gammas, betas])
     
     # node와 edge를 기반으로 graph를 만든다.
-    graph = network_graph(nodes, edges, graph_name).graph
+    graph = network_graph(nodes, edges, graph_name)
     # 그래프를 기반으로 대응되는 Hamiltonian을 계산
     H = Hamiltonian(graph).H
     # 그래프를 기반으로 대응되는 parameter로 표현된 양자 상태의 회로를 만든다.
@@ -35,7 +35,7 @@ def main(cfg=OmegaConf.load('config.yaml'))->None:
     # parameter가 주어지면 그에 대응되는 expectation을 주는 함수
     exp = expectation(H, state).calc_exp
     # 주어진 optimizing 방법을 통해서 optimizing을 진행
-    opt_result = opimization(exp, init_para).scipy_min('COBYLA')
+    opt_result = optimization(exp, init_para).scipy_min(cfg.opt_method)
     # Print the optimization results
     # 최적화된 parameter를 불러온다.
     opt_para = opt_result.x
@@ -45,7 +45,7 @@ def main(cfg=OmegaConf.load('config.yaml'))->None:
     # 최적화된 parameter에 해당되는 양자 상태를 얻는다.
     circuit = psi.get_circuit(opt_para)
     #양자 상태를 측정하여 최적의 결과를 계산한다.
-    result = get_answer(circuit, graph_name)
+    result = optimized_result(circuit, graph).get_answer()
 
 
 

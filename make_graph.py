@@ -29,7 +29,7 @@ class network_graph:
         pos = nx.spring_layout(self.graph)
         # 그래프 그리기
         nx.draw_networkx(self.graph, node_color=colors, node_size=600, alpha=1, ax=default_axes, pos=pos)
-        # 재목 설정
+        # 제목 설정
         plt.title(self.graph_name)
         # graph 저장
         with savefig('result/'+self.graph_name+'/', self.graph_name + '_graph.png') as sf:

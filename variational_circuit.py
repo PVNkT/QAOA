@@ -7,8 +7,9 @@ class variational_circuit():
 
     def __init__(self, graph) -> None:
         # graph로 부터 node와 edge의 정보를 저장
-        self.nodes = list(graph.nodes)
-        self.edges = list(graph.edges)
+        self.graph = graph.graph
+        self.nodes = list(self.graph.nodes)
+        self.edges = list(self.graph.edges)
 
     def state(self, parameter):
         # 만든 회로를 CircuitStateFn 형태로 바꿈
@@ -31,7 +32,7 @@ class variational_circuit():
         for i in range(p):
             for edge in self.edges:
                 # 각 edge들에 대해서 problem Hamiltonian에 해당되는 unitary를 적용
-                qc = self.problem_part(qc, edge[0:2], gammas[i])
+                qc = self.problem_part(qc, edge, self.get_weight(edge)*gammas[i])
             qc.barrier()
             for node in self.nodes:
                 # 각 node들에 대해서 mixing Hamiltonian에 해당되는 unitary를 적용
@@ -47,11 +48,14 @@ class variational_circuit():
         return qc
 
     def mixing_part(self, qc:QuantumCircuit, qubit, beta:float):
-        # mixing Hamiltonian에 대응되는 unitary를 주어진 qubit에
-        if type(qubit) == tuple:
-            qubit = qubit[0]
+        # mixing Hamiltonian에 대응되는 unitary를 주어진 qubit에 적용
         qc.rx(beta, qubit)
         return qc
+
+    def get_weight(self, edge):
+        edge_weight = self.graph.get_edge_data(*edge)['weight']
+        return edge_weight
+
 
 
 

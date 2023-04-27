@@ -1,6 +1,6 @@
 from scipy.optimize import minimize
 
-class opimization:
+class optimization:
 
     def __init__(self, function, parameter) -> None:
         # 함수와 parameter 저장
